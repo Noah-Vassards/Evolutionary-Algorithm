@@ -1,0 +1,6 @@
+
+
+mean total time: NaN
+mean popultation NaN
+mean time per generation NaN
+success rate: 0.0
