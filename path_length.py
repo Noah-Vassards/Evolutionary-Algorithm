@@ -1,5 +1,5 @@
 from graph import Graph
-from TSP import GRAPH, GRAPH2
+from TSP import GRAPH, GRAPH2, GRAPH3
 import sys
 
 GRAPH: Graph
@@ -11,19 +11,19 @@ def path_len(path):
     for i, vertex in enumerate(path):
         # print(vertex, path[(i + 1) % len(path)])
         # print(GRAPH2.get_edge_weight((vertex, path[(i + 1) % len(path)])))
-        total_len += GRAPH2.get_edge_weight(
+        total_len += GRAPH3.get_edge_weight(
             (vertex, path[(i + 1) % len(path)]))
     return total_len
 
+if __name__ == "__main__":
+    file = sys.argv[1]
 
-file = sys.argv[1]
-
-with open(file, 'r') as f:
-    content = f.read().split('\n')
-    try:
-        for line in content:
-            (path, _, _, _) = eval(line)
-            print(path_len(eval(path)))
-    except SyntaxError:
-        f.close()
-        exit()
+    with open(file, 'r') as f:
+        content = f.read().split('\n')
+        try:
+            for line in content:
+                (path, _, _, _) = eval(line)
+                print(path_len(eval(path)))
+        except SyntaxError:
+            f.close()
+            exit()

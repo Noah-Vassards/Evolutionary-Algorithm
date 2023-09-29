@@ -1,10 +1,11 @@
 import subprocess
-from graph import Graph
+from path_length import path_len
 
 solutions = []
 times = []
 populations = []
 times_per_generation = []
+paths_len = []
 failure = 0
 success = 0
 
@@ -19,6 +20,7 @@ for _ in range(executions):
     solution = output[-1]
     if solution != 'failure':
         solutions.append(solution)
+        paths_len.append(path_len(eval(solution)))
         time = float(output[-3].split(' ')[-1].removesuffix('ms'))
         # gets only the time value
         times.append(time)
@@ -32,12 +34,13 @@ for _ in range(executions):
         failure += 1
 
 
-print(*zip(solutions, times, populations, times_per_generation), sep='\n')
+print(*zip(solutions, times, populations, times_per_generation, paths_len), sep='\n')
 print()
-print('mean total time:', round(sum(times)/len(times), 2)
+print('Average total time:', round(sum(times)/len(times), 2)
       if len(times) > 0 else 'NaN')
-print('mean popultation', int(sum(populations)/len(populations))
+print('Average number of generation', int(sum(populations)/len(populations))
       if len(populations) > 0 else 'NaN')
-print('mean time per generation', round(sum(times_per_generation) /
+print('Average time per generation:', round(sum(times_per_generation) /
       len(times_per_generation), 2) if len(times_per_generation) > 0 else 'NaN')
 print(f'success rate:', (success * 100) / (failure + success))
+print('Shortest path found:', (paths_len.count(95) * 100)/len(paths_len) if len(paths_len) > 0 else 'NaN')

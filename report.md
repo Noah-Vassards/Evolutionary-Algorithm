@@ -195,7 +195,6 @@ average time per generation: 0.06ms
 success rate: 100.0%
 shortest path found: 90.0%
 
-
 50 generations:
 average total time: 3.51ms
 average number of generations: 61
@@ -210,3 +209,105 @@ average time per generation: 0.05ms
 success rate: 100.0%
 shortest path found: 100.0%
 ```
+
+Based on the results, we can conclude that 10 generations is the best as it allows to find the shortest path 90% of the time and does not take too much generations to find a solution. 
+
+But the efficiency of the algorithm can still be improved. As said before, the selection process is kind of elitist, which can led to a population based on the same individual. 
+
+### Optimisation
+
+As a reminder, the actual selection process remove the least efficient individual and replace it by duplicating one individual among the remaining in the popultation. This is especially this last step that is the most likely to led to a population of the same individual. To fix this, instead of duplicating an individual, we can create one from scratch. This will increase the diversity of the population, thus allowing the algorithm to have a wider range of research.
+
+### Test
+
+After 100 simulations, we get those results:
+
+```bash
+Average total time: 0.82
+Average number of generations: 12
+Average time per generation 0.06ms
+success rate: 100.0%
+Shortest path found: 100.0%
+```
+
+Again, each simulations waited for at least 10 generations before eventually giving a solution.
+
+What can we say about these results ? Well, it shows that the fix we made to the algorithm are really efficient. We decreased the total computation time by 63%, the number of generations is 54% less and now, we find the shortest path 100% of the time.
+
+So what can we say about elitism in evolutionary algorithm ? The tests results proved that strict elitism (all new individuals are from the best of the old population) reduces the efficency of the algorithm, both time and accuracy speaking. Instead a selection with a greater diversity allows to find the best solution faster with less generations, as it increase the area of search for a solution.
+
+## Larger graphs
+
+Now that we have a fairly efficent algorithm that always finds the best solution, let's try it with a bunch of differently shaped graphs.
+
+```mermaid
+graph LR;
+  A((A)) <-- 29 --> B((B))
+  A <-- 20 --> C((C))
+  A <-- 21 --> D((D))
+  A <-- 18 --> E((E))
+  A <-- 10 --> F((F))
+  B <-- 15 --> C
+  B <-- 28 --> D
+  B <-- 17 --> E
+  B <-- 14 --> F
+  C <-- 23 --> D
+  C <-- 11 --> E
+  C <-- 8 --> F
+  D <-- 27 --> E
+  D <-- 25 --> F
+  E <-- 12 --> F
+```
+
+This graph has 6 vertices, 15 edges and a shortest path of 95
+
+Results:
+```bash
+Average total time: 1.47ms
+Average number of generation 16
+Average time per generation: 0.09ms
+success rate: 100.0%
+Shortest path found: 64.0%
+```
+
+```mermaid
+graph TD
+  A((A)) <-- 29 --> B((B))
+  A <-- 20 --> C((C))
+  A <-- 21 --> D((D))
+  A <-- 18 --> E((E))
+  A <-- 10 --> F((F))
+  B <-- 15 --> C
+  B <-- 28 --> D
+  B <-- 17 --> E
+  B <-- 14 --> F
+  C <-- 23 --> D
+  C <-- 11 --> E
+  C <-- 8 --> F
+  D <-- 27 --> E
+  D <-- 25 --> F
+  E <-- 12 --> F
+  A <-- 30 --> G((G))
+  A <-- 31 --> H((H))
+  A <-- 32 --> I((I))
+  B <-- 24 --> G
+  B <-- 26 --> H
+  B <-- 33 --> I
+  C <-- 19 --> G
+  C <-- 22 --> H
+  C <-- 34 --> I
+  D <-- 16 --> G
+  D <-- 35 --> H
+  D <-- 36 --> I
+  E <-- 37 --> G
+  E <-- 38 --> H
+  E <-- 39 --> I
+  F <-- 40 --> G
+  F <-- 41 --> H
+  F <-- 42 --> I
+  G <-- 43 --> H
+  G <-- 44 --> I
+  H <-- 45 --> I
+```
+
+This graph contains 9 vertices, 35 vertices with a shortest path of

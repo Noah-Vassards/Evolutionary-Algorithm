@@ -92,9 +92,40 @@ def cross_over(indiv1: list, indiv2: list):
     return indiv1, indiv2
 
 
+def selection2(population: list, pop_fitness: list,
+               verticies: list, permutations: list):
+    """_summary_:
+        select the best individuals to create a new population with increased
+        diversity
+
+    Args:
+        population (list): a list containing all individuals
+        pop_fitness (list): a list containing the fitness score of each 
+                            individual
+        verticies (list): all verticies of the graph
+
+    Returns:
+        list: the newest population
+    """
+    drop = population[pop_fitness.index(min(pop_fitness))]
+    population.remove(drop)
+    population.append(rd.choice(population))
+    len_pop = len(population)
+    new_pop = []
+    for i in range(0, len_pop, 2):
+        if i + 1 < len_pop:
+            child1, child2 = cross_over2(
+                population[i], population[(i + 1)], verticies)
+            new_pop.extend([child1, child2])
+        else:
+            new_pop.append(list(rd.choice(permutations)))
+    mutation(new_pop)
+    return new_pop
+
+
 def selection(population: list, pop_fitness: list, verticies: list):
     """_summary_:
-        select the best individual to create a new population
+        select the best individuals to create a new population
 
     Args:
         population (list): a list containing all individuals
@@ -245,7 +276,7 @@ def fitness(graph: Graph, population, verticies_nb):
         score = 0
 
 
-def evolutionary2(graph: Graph) -> list|str:
+def evolutionary2(graph: Graph) -> list | str:
     """_summary_:
         Evolutionary algorithm main. Initialize a population then loops until
         a fit enough path is found after a certain number of generations, 
@@ -262,10 +293,11 @@ def evolutionary2(graph: Graph) -> list|str:
     count = 0
     start_time = time.time()
     populations = 0
-    generation = 100
+    generation = 10
     max_fitness = 0
     verticies = graph.get_verticies()
-    population = rd.sample(list(it.permutations(verticies)), 5)
+    permutations = list(it.permutations(verticies))
+    population = rd.sample(permutations, 5)
     population = [list(indiv) for indiv in population]
     while True:
         if count > 1000:
@@ -281,13 +313,14 @@ def evolutionary2(graph: Graph) -> list|str:
             print(f'Elapsed time is {end * 1000:.2f}ms')
             print(f'Number of populations: {populations}')
             return population[pop_fitness.index(max(pop_fitness))]
-        population = selection(population, pop_fitness, verticies)
+        population = selection2(population, pop_fitness,
+                                verticies, permutations)
         generation -= 1
         max_fitness = max(max_fitness, max(pop_fitness))
         count += 1
 
 
-def evolutionary(graph: Graph) -> list|str:
+def evolutionary(graph: Graph) -> list | str:
     """_summary_:
         Evolutionary algorithm main. Initialize a population then loops until
         a fit enough path is found, or if the 1000th generation is reached.
