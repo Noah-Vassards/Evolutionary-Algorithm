@@ -1,5 +1,5 @@
 from graph import Graph
-from TSP import GRAPH, GRAPH2, GRAPH3
+from TSP import GRAPH, GRAPH2, GRAPH3, GRAPH4
 import sys
 
 GRAPH: Graph
@@ -11,7 +11,7 @@ def path_len(path):
     for i, vertex in enumerate(path):
         # print(vertex, path[(i + 1) % len(path)])
         # print(GRAPH2.get_edge_weight((vertex, path[(i + 1) % len(path)])))
-        total_len += GRAPH3.get_edge_weight(
+        total_len += GRAPH4.get_edge_weight(
             (vertex, path[(i + 1) % len(path)]))
     return total_len
 

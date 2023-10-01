@@ -310,4 +310,62 @@ graph TD
   H <-- 45 --> I
 ```
 
-This graph contains 9 vertices, 35 vertices with a shortest path of
+This graph contains 9 vertices, 35 edges with a shortest path of 194
+
+Results:
+```bash
+Average total time: 35.16ms
+Average number of generation 24
+Average time per generation: 2.41ms
+success rate: 100.0%
+Shortest path found: 5.0%
+```
+
+From the lasts two tests, we can conclude that the algorithm is not really efficient on large graphs. The increasing time is quite logic, as the fitness function has to compare an edge in an individual's path to all eges in the graph, which in the worst case gives us a complexity of O(nm), with n the number of vertices in the graph and m the number of edges. 
+
+However the algorithm seems to struggle finding the shortest path. Since the more edges and vertices there is in the graph, the more possible paths. So we need to increase the searching range. One way to do this will be to increase the number of individuals per generation. Currently there are 5 individuals per generation. We should first test with 10 individuals per generation. We will use the latest graph used.
+
+Results:
+```bash
+Average total time: 46.92ms
+Average number of generation 54
+Average time per generation: 1.81ms
+success rate: 100.0%
+Shortest path found: 3.0%
+```
+
+What about with 20 individuals per generations ?
+
+Results:
+```bash
+Average total time: 57.44ms
+Average number of generation 47
+Average time per generation: 2.73ms
+success rate: 100.0%
+Shortest path found: 6.0%
+```
+
+The improveness is not really significant. Maybe we should try increasing the number of generation needed before choosing a solutions. Let's try with 20 generations minimum and 10 individuals per generations.
+
+Results:
+```bash
+Average total time: 62.18ms
+Average number of generation 106
+Average time per generation: 1.05ms
+success rate: 97.0%
+Shortest path found: 5.2%
+```
+
+It seems increasing the number of generated generations or increasing the number of individuals per generations will not improve the efficiency of the algoritm, at least not enough for it to be worth the time and ressources taken.
+
+But there is still one optimization we can try. Currently, the mutation function swaps a two random vertices in an individual. This help increase a bit the diversity of the population, but we can do much better. Instead of randomly swap verticies, we will swap vertices only if it decreases the length of the paths.
+
+After implementing the new mutation function and testing with 5 generation minimum and 5 individuals per population, we get this results:
+
+```bash
+Average total time: 49.15ms
+Average number of generation 6
+Average time per generation: 7.82ms
+success rate: 99.0%
+Shortest path found: 25.3%
+```
