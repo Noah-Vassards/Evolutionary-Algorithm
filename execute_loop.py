@@ -44,4 +44,4 @@ print('Average number of generation', int(sum(populations)/len(populations))
 print('Average time per generation:', round(sum(times_per_generation) /
       len(times_per_generation), 2) if len(times_per_generation) > 0 else 'NaN')
 print(f'success rate:', (success * 100) / (failure + success))
-print('Shortest path found:', (paths_len.count(194) * 100)/len(paths_len) if len(paths_len) > 0 else 'NaN')
+print('Shortest path found:', (paths_len.count(96) * 100)/len(paths_len) if len(paths_len) > 0 else 'NaN')

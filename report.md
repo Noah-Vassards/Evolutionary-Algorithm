@@ -23,7 +23,27 @@ The goal of this work is to implement an evolutionary algorithm that will be abl
 
 ## Getting started
 
-For an evolutionary algorithm to be evolutionary, it needs X parts:
+### The graph
+
+In this experiment, we will represent our graph as a Python class.
+This class will contain:
+- a list of every vertices in the graph
+- a list of all edges
+- a list of all edges' weight
+
+The class contains some methods to handle the graph:
+- get_verticies: to get all vertices of the graph
+- get_vertex: get an edge by its value
+- get_total_len: get the total length of th graph by summing up all weights
+- get_edge_weight: retreive the weight of a given edge
+- add_vertex: add a new vertex in the graph
+- add_egde: add a new edge in the graph
+- get edges: get all edges within the graph
+- get neighbours: retreive all neighbours of a given vertex
+
+### The algorithm
+
+For an evolutionary algorithm to be evolutionary, it needs 5 parts:
 
 - a population;
 - a way to quantify the quality of each individuals (called fitness)
@@ -369,3 +389,21 @@ Average time per generation: 7.82ms
 success rate: 99.0%
 Shortest path found: 25.3%
 ```
+
+Just out of curiosity, here are the results for the first weighted graph we used:
+
+```bash
+Average total time: 0.8ms
+Average number of generation 6
+Average time per generation: 0.12ms
+success rate: 99.0%
+Shortest path found: 98.0%
+```
+
+As we can see, the algorithm is twice as slow than before, but finds the best solution easier.
+
+## Conlusion
+
+During this experiment, we saw multiple ways of implementing and optimizing an evolutioonary algorithm. We can take two important factors which are elitism and diversity. We saw that two much elitism, that is taking the best individuals and work only with them, might and will lead to a population composed of the same individual, which sorely reduces our chances to find the best solution, at least in a reasonable time. This is correlated with diversity. Diversity helps increase our range of search, which helps finding different solutions and thus the best one. But to much diversity may increase the computational time so much that the improvement are not worth it any more. 
+
+We must find the perfect balance between elitism and diversity, to have an evolutionary algorithms that keeps some of the best individuals from a quite large range of search to find the best solution in a reasonable time.

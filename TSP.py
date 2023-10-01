@@ -13,7 +13,6 @@ GRAPH.add_vertex('B')
 GRAPH.add_vertex('C')
 GRAPH.add_vertex('D')
 GRAPH.add_vertex('E')
-# GRAPH.add_vertex('F')
 
 GRAPH.add_edge(('A', 'B'), 13)
 GRAPH.add_edge(('B', 'C'), 30)
@@ -110,19 +109,14 @@ GRAPH4.add_edge(('G', 'H'), 43)
 GRAPH4.add_edge(('G', 'I'), 44)
 GRAPH4.add_edge(('H', 'I'), 45)
 
-# GRAPH.add_edge(('E', 'F'))
-# GRAPH.add_edge(('F', 'A'))
-
 print(GRAPH.get_verticies())
 print(GRAPH.get_edges())
 print()
 
-# print(travel_graph(GRAPH, 'A', GOAL))
-# print(naive(GRAPH))
 def tsp(graph):
     print(evolutionary3(graph))
     print(end='')
 
 
 if __name__ == "__main__":
-    tsp(GRAPH4)
+    tsp(GRAPH2)
