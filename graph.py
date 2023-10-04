@@ -27,6 +27,9 @@ class Graph:
             if (b, a) == _edge:
                 return self.weight[i]
         return -1
+    
+    def get_edge_weights(self):
+        return self.weight
 
     def add_vertex(self, vertex):
         if vertex in self.verticies:
