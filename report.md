@@ -207,6 +207,7 @@ average number of generations: 11
 average time per generation: 0.06ms
 success rate: 100.0%
 shortest path found: 82.0%
+average path length: 96.54
 
 10 generations:
 average total time: 1.3ms
@@ -214,6 +215,7 @@ average number of generations: 22
 average time per generation: 0.06ms
 success rate: 100.0%
 shortest path found: 90.0%
+average path length: 96.3
 
 50 generations:
 average total time: 3.51ms
@@ -221,6 +223,7 @@ average number of generations: 61
 average time per generation: 0.06ms
 success rate: 100.0%
 shortest path found: 100.0%
+average path length: 96.3
 
 100 generations:
 average total time: 5.97
@@ -228,6 +231,7 @@ average number of generations: 112
 average time per generation: 0.05ms
 success rate: 100.0%
 shortest path found: 100.0%
+average path length: 96.3
 ```
 
 Based on the results, we can conclude that 10 generations is the best as it allows to find the shortest path 90% of the time and does not take too much generations to find a solution. 
@@ -248,6 +252,7 @@ Average number of generations: 12
 Average time per generation 0.06ms
 success rate: 100.0%
 Shortest path found: 100.0%
+Average pathe found: 96
 ```
 
 Again, each simulations waited for at least 10 generations before eventually giving a solution.
@@ -288,6 +293,7 @@ Average number of generation 16
 Average time per generation: 0.09ms
 success rate: 100.0%
 Shortest path found: 64.0%
+Average shortest path: 95.88
 ```
 
 ```mermaid
@@ -339,6 +345,7 @@ Average number of generation 24
 Average time per generation: 2.41ms
 success rate: 100.0%
 Shortest path found: 5.0%
+Average path length: 208.94
 ```
 
 From the lasts two tests, we can conclude that the algorithm is not really efficient on large graphs. The increasing time is quite logic, as the fitness function has to compare an edge in an individual's path to all eges in the graph, which in the worst case gives us a complexity of O(nm), with n the number of vertices in the graph and m the number of edges. 
@@ -352,6 +359,7 @@ Average number of generation 54
 Average time per generation: 1.81ms
 success rate: 100.0%
 Shortest path found: 3.0%
+Average path length: 205.87
 ```
 
 What about with 20 individuals per generations ?
@@ -362,7 +370,8 @@ Average total time: 57.44ms
 Average number of generation 47
 Average time per generation: 2.73ms
 success rate: 100.0%
-Shortest path found: 6.0%
+Shortest path found: 1.0% (189)
+Average path length: 203.71
 ```
 
 The improveness is not really significant. Maybe we should try increasing the number of generation needed before choosing a solutions. Let's try with 20 generations minimum and 10 individuals per generations.
@@ -373,7 +382,8 @@ Average total time: 62.18ms
 Average number of generation 106
 Average time per generation: 1.05ms
 success rate: 97.0%
-Shortest path found: 5.2%
+Shortest path found: 1% (190)
+Average path length: 199.96
 ```
 
 It seems increasing the number of generated generations or increasing the number of individuals per generations will not improve the efficiency of the algoritm, at least not enough for it to be worth the time and ressources taken.
@@ -387,7 +397,8 @@ Average total time: 49.15ms
 Average number of generation 6
 Average time per generation: 7.82ms
 success rate: 99.0%
-Shortest path found: 25.3%
+Shortest path found: 9% (189)
+Average path length: 192
 ```
 
 Just out of curiosity, here are the results for the first weighted graph we used:
@@ -398,12 +409,82 @@ Average number of generation 6
 Average time per generation: 0.12ms
 success rate: 99.0%
 Shortest path found: 98.0%
+Average path lenght: 96.1
 ```
 
-As we can see, the algorithm is twice as slow than before, but finds the best solution easier.
+As we can see, the algorithm is twice as slow than before, but finds the best solution easier. Also when it does not find the best solution, the results are much more grouped towards the best solution than before
+
+### Space complexity
+
+Currently, when generating permutations, the algorithm generates them all. Which means it computes and stores n! values (with n the number of vertices in the graph). So, we need to change the way permutations are done. Instead of generating all permutations possible we will generate only the number we want. This will save both running time and memory usage.
+
+Here are the results, with the same parameters as last time:
+
+```bash
+Average total time: 7.43ms
+Average number of generation 6
+Average time per generation: 1.21ms
+success rate: 99.0%
+Shortest path found: 8% (189)
+Average path length: 195.19
+```
+
+We have just divided the computation time by 7, which is a great increase of time efficiency
+
+## Even larger graph
+
+Let's test our algorithm to its limits. First, we have a graph with 20 verticies and 190 edges, with the shortest path found being 187.
+
+```bash
+Average total time: 310.06ms
+Average number of generation 6
+Average time per generation: 51.17ms
+success rate: 100.0%
+Shortest path found: 1.0% (187)
+Average path length: 223.19
+```
+
+Here, with a graph that has 50 vertices, 1225 edges and a shortest path of 486.
+
+```bash
+Average total time: 16551.0
+Average number of generation 6
+Average time per generation: 2758.5ms
+success rate: 100.0%
+Shortest path found: 1.0% (486)
+Average shortest path: 573.35
+```
+
+Those tests were executed with at least 5 generations and 10 individuals in each population. Let's now test with 10 generations minimum.
+
+With the graph with 20 vertices, it found a shortest path of 181:
+
+```bash 
+Average total time: 621.43ms
+Average number of generation 11
+Average time per generation: 56.38ms
+success rate: 100.0%
+Shortest path found: 1.0% (181)
+Average path length: 219.47
+```
+
+And there are the results for the graph with 50 vertices:
+
+```bash
+Average total time: 32916.96ms
+Average number of generation 11
+Average time per generation: 2992.45ms
+success rate: 100.0%
+Shortest path found: 1.0% (487)
+Average shortest path: 573.02
+```
+
+We can see that the bigger the graph the less affected the efficency by the number of generation minimum. Although, the time taken per generation increased insignificantly, so it would still be worth to wait for more generations before giving a result, as demonstrated further up in this report.
 
 ## Conlusion
 
 During this experiment, we saw multiple ways of implementing and optimizing an evolutioonary algorithm. We can take two important factors which are elitism and diversity. We saw that two much elitism, that is taking the best individuals and work only with them, might and will lead to a population composed of the same individual, which sorely reduces our chances to find the best solution, at least in a reasonable time. This is correlated with diversity. Diversity helps increase our range of search, which helps finding different solutions and thus the best one. But to much diversity may increase the computational time so much that the improvement are not worth it any more. 
 
-We must find the perfect balance between elitism and diversity, to have an evolutionary algorithms that keeps some of the best individuals from a quite large range of search to find the best solution in a reasonable time.
+So, to have an evolutionary algorithms that keeps some of the best individuals from a quite large range of search to find the best solution in a reasonable time, we must find the perfect balance between elitism and diversity.
+
+Lastly, we demonstrated that the size of graph affect the efficiency of the algorithm. Obviously it would take more time before eventually finding a solution. But most of all, it makes the algorithm struggle more to find the best solutions every time, since the larger the graph is, the more permutation it exists, so the less likely it is to find the best solution.

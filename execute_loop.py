@@ -1,5 +1,6 @@
 import subprocess
 from path_length import path_len
+import sys
 
 solutions = []
 times = []
@@ -11,8 +12,8 @@ success = 0
 
 executions = 100
 
-for _ in range(executions):
-    # print('simulation ', i)
+for i in range(executions):
+    print('simulation ', i, file=sys.stderr)
     proc = subprocess.Popen(
         ['./TSP.py'], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     # execute ./TSP.py and catch all outputs
@@ -44,4 +45,4 @@ print('Average number of generation', int(sum(populations)/len(populations))
 print('Average time per generation:', round(sum(times_per_generation) /
       len(times_per_generation), 2) if len(times_per_generation) > 0 else 'NaN')
 print(f'success rate:', (success * 100) / (failure + success))
-print('Shortest path found:', (paths_len.count(96) * 100)/len(paths_len) if len(paths_len) > 0 else 'NaN')
+print('Shortest path found:', (paths_len.count(189) * 100)/len(paths_len) if len(paths_len) > 0 else 'NaN')

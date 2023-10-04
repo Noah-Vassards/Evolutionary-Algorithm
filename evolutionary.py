@@ -6,6 +6,16 @@ from collections import Counter
 import time
 
 
+def generate_permutations(number, l):
+    if number == 1:
+        return rd.sample(l, len(l))
+    permutations = []
+    for _ in range(number):
+        random_permutation = rd.sample(l, len(l))
+        permutations.append(random_permutation)
+    return permutations
+
+
 def get_first_not_in_list(list, elems):
     """_summary_:
         get the first element not in the list
@@ -40,15 +50,20 @@ def check_visit_once(iter: list, verticies):
 
 def mutation2(population, graph: Graph):
     for indiv in population:
+        print('mutating indiv')
         indiv_len = len(indiv)
         # print('indiv len', indiv_len)
+        count = 0
         for i in range(0, indiv_len-3):
             for j in range(i + 2, indiv_len - 2):
+                count += 1
                 # print((i, i + 1, j, j + 1))
-                gain = graph.get_edge_weight((indiv[i], indiv[i + 1])) + graph.get_edge_weight((indiv[j], indiv[j + 1])) - graph.get_edge_weight((indiv[i], indiv[j]))  - graph.get_edge_weight((indiv[i + 1], indiv[j + 1]))
+                gain = graph.get_edge_weight((indiv[i], indiv[i + 1])) + graph.get_edge_weight(
+                    (indiv[j], indiv[j + 1])) - graph.get_edge_weight((indiv[i], indiv[j])) - graph.get_edge_weight((indiv[i + 1], indiv[j + 1]))
                 if gain > 0:
                     indiv[i + 1], indiv[j] = indiv[j], indiv[i + 1]
-        
+
+
 def mutation(population):
     """_summary_:
         swaps two verticies with each other in each individuals of the 
@@ -102,6 +117,35 @@ def cross_over(indiv1: list, indiv2: list):
     indiv2[rd_index:] = tmp
     return indiv1, indiv2
 
+def selection3(population: list, pop_fitness: list,
+               verticies: list, graph: Graph):
+    """_summary_:
+        select the best individuals to create a new population with increased
+        diversity
+
+    Args:
+        population (list): a list containing all individuals
+        pop_fitness (list): a list containing the fitness score of each 
+                            individual
+        verticies (list): all verticies of the graph
+
+    Returns:
+        list: the newest population
+    """
+    drop = population[pop_fitness.index(min(pop_fitness))]
+    population.remove(drop)
+    population.append(rd.choice(population))
+    len_pop = len(population)
+    new_pop = []
+    for i in range(0, len_pop, 2):
+        if i + 1 < len_pop:
+            child1, child2 = cross_over2(
+                population[i], population[(i + 1)], verticies)
+            new_pop.extend([child1, child2])
+        else:
+            new_pop.append(generate_permutations(1, verticies))
+    mutation2(new_pop, graph)
+    return new_pop
 
 def selection2(population: list, pop_fitness: list,
                verticies: list, permutations: list, graph: Graph):
@@ -286,6 +330,49 @@ def fitness(graph: Graph, population, verticies_nb):
         yield (score / verticies_nb) * 100
         score = 0
 
+def evolutionary4(graph: Graph) -> list | str:
+    """_summary_:
+        Evolutionary algorithm main. Initialize a population then loops until
+        a fit enough path is found after a certain number of generations, 
+        or if the 1000th generation is reached.
+
+    Args:
+        graph (Graph): Graph structure where to look for the shortest path
+
+    Returns:
+        str | list: 
+            On failure, returns 'failure'
+            On success, returns the list containing the path
+    """
+    count = 0
+    start_time = time.time()
+    populations = 0
+    generation = 10
+    max_fitness = 0
+    verticies = graph.get_verticies()
+    population = generate_permutations(10, verticies)
+    print('population ok')
+    while True:
+        print(count)
+        if count > 1000:
+            print(f'Elapsed time is 999999999999999999999999ms')
+            print(f'Number of populations: 999999999999999999999999')
+            return 'failure'
+        populations += 1
+        print(population)
+        pop_fitness = list(fitness4(graph, population, len(verticies)))
+        print(pop_fitness)
+        if generation <= 0 and max(pop_fitness) >= max_fitness:
+            end = time.time() - start_time
+            print(f'Elapsed time is {end * 1000:.2f}ms')
+            print(f'Number of populations: {populations}')
+            return population[pop_fitness.index(max(pop_fitness))]
+        population = selection3(population, pop_fitness,
+                                verticies, graph)
+        generation -= 1
+        max_fitness = max(max_fitness, max(pop_fitness))
+        count += 1
+
 
 def evolutionary3(graph: Graph) -> list | str:
     """_summary_:
@@ -311,6 +398,7 @@ def evolutionary3(graph: Graph) -> list | str:
     population = rd.sample(permutations, 10)
     population = [list(indiv) for indiv in population]
     while True:
+        print(count)
         if count > 1000:
             print(f'Elapsed time is 999999999999999999999999ms')
             print(f'Number of populations: 999999999999999999999999')
